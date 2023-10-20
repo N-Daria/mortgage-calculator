@@ -38,14 +38,14 @@ export default function Input({
         {isTooltip && <Tooltip tooltipText={tooltipText} />}
       </div>
       <input
-        className={`input w-full bg-baseColor rounded-md border-borderColor py-3 px-6 border ${
+        className={`input w-full bg-baseColor rounded-md border-borderColor py-3 pl-6 pr-12 border ${
           isError && "input_error"
         }`}
         type="text"
         id={id}
         placeholder={placeholder}
         name={inputName}
-        value={min}
+        defaultValue={min || 0}
         onChange={onChange}
       />
 
