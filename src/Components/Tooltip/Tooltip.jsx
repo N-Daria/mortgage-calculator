@@ -7,8 +7,9 @@ export default function Tooltip({ tooltipText }) {
   function toggleTooltip() {
     isTooltipOpen ? setIsTooltipOpen(false) : setIsTooltipOpen(true);
   }
+
   return (
-    <div className="tooltip relative" onClick={toggleTooltip}>
+    <button className="tooltip relative" onClick={toggleTooltip} type="button">
       <div
         className={`${
           !isTooltipOpen && "hidden"
@@ -16,6 +17,6 @@ export default function Tooltip({ tooltipText }) {
       >
         {tooltipText}
       </div>
-    </div>
+    </button>
   );
 }
