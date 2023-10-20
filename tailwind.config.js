@@ -16,6 +16,7 @@ module.exports = {
         secondaryColor: "#242529",
         accent: "#2D2D2D",
         textDark: "#161616",
+        red: "#E76143",
       },
       spacing: {
         120: "120px",
