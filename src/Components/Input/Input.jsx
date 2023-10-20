@@ -8,11 +8,14 @@ import InputSlider from "../InputSlider/InputSlider";
 export default function Input({
   id,
   placeholder,
-  text,
+  header,
   inputName,
   min,
   max,
-  isIcon,
+  isSelect,
+  onClickSelect,
+  selectedValue,
+  isIconCurrency,
   isTooltip,
   tooltipText,
   isMessage,
@@ -23,16 +26,24 @@ export default function Input({
   errorText,
   onChange,
 }) {
-  function connectInputs() {}
+  function connectInputs() {
+    if (isSlider) {
+    } else {
+      onChange();
+    }
+  }
 
   return (
     <div className="m-w-mainContentM tablet:m-w-[325px] w-full relative">
       <div className="mb-3 flex">
         <label
           htmlFor={id}
-          className={`${isIcon && "input__icon"} input__header m-0 mr-[6px]`}
+          className={`${
+            (isIconCurrency && "input__icon input__icon_currency") ||
+            (isSelect && "input__icon input__icon_select")
+          } input__header m-0 mr-[6px]`}
         >
-          {text}
+          {header}
         </label>
 
         {isTooltip && <Tooltip tooltipText={tooltipText} />}
@@ -40,13 +51,15 @@ export default function Input({
       <input
         className={`input w-full bg-baseColor rounded-md border-borderColor py-3 pl-6 pr-12 border ${
           isError && "input_error"
-        }`}
+        } ${isSelect && "input_select"}`}
         type="text"
         id={id}
         placeholder={placeholder}
         name={inputName}
-        defaultValue={min || 0}
-        onChange={onChange}
+        // defaultValue={min || ""}
+        onChange={connectInputs}
+        onClick={onClickSelect}
+        value={selectedValue || ""}
       />
 
       {isSlider && (
