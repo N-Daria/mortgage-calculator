@@ -9,13 +9,13 @@ export default function Tooltip({ tooltipText }) {
   }
   return (
     <div className="tooltip relative" onClick={toggleTooltip}>
-      <p
+      <div
         className={`${
           !isTooltipOpen && "hidden"
         } tooltip__text py-1 px-2 bg-[#41434E] m-0 absolute w-[266px] top-7 z-10 rounded`}
       >
         {tooltipText}
-      </p>
+      </div>
     </div>
   );
 }
