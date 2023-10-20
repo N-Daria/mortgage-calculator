@@ -1,4 +1,5 @@
 import Input from "../Input/Input";
+import Search from "../Search/Search";
 import "./Select.css";
 import React, { useState } from "react";
 
@@ -24,7 +25,9 @@ export default function Select({ placeholder, header, options }) {
       />
 
       {isOpen && (
-        <div className="w-full bg-baseColor rounded-lg border-borderColor py-2 border absolute top-[92px]">
+        <div className="select__dropdown-block w-full bg-secondaryColor rounded-lg border-borderColor py-2 border absolute top-[92px]">
+          <Search />
+
           <ul className="select__dropdown">
             {options.map((option) => (
               <li

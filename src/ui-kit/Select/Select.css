@@ -1,3 +1,7 @@
+.select__dropdown-block {
+  box-shadow: 0px 8px 32px 0px rgba(0, 0, 0, 0.16);
+}
+
 .select__dropdown {
   max-height: 216px;
   overflow: auto;
@@ -18,7 +22,6 @@
   display: flex;
   cursor: pointer;
   padding: 10px 16px;
-
   font-family: "Inter", sans-serif;
   font-size: 14px;
   font-weight: 400;
