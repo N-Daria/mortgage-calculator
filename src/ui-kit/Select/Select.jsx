@@ -1,11 +1,13 @@
 import Input from "../Input/Input";
 import Search from "../Search/Search";
 import "./Select.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-export default function Select({ placeholder, header, options }) {
+export default function Select({ placeholder, header, options, isSearch }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState("");
+  const [searchWord, setSearchWord] = useState("");
+  const [filteredOption, setFilteredOption] = useState(options);
 
   const toggling = () => setIsOpen(!isOpen);
 
@@ -13,6 +15,11 @@ export default function Select({ placeholder, header, options }) {
     setSelectedOption(value);
     setIsOpen(false);
   };
+
+  useEffect(() => {
+    const newFiltered = options.filter((el) => el.includes(searchWord));
+    setFilteredOption(newFiltered);
+  }, [searchWord]);
 
   return (
     <div className="select relative">
@@ -26,10 +33,12 @@ export default function Select({ placeholder, header, options }) {
 
       {isOpen && (
         <div className="select__dropdown-block w-full bg-secondaryColor rounded-lg border-borderColor py-2 border absolute top-[92px]">
-          <Search />
+          {isSearch && (
+            <Search searchWord={searchWord} setSearchWord={setSearchWord} />
+          )}
 
           <ul className="select__dropdown">
-            {options.map((option) => (
+            {filteredOption?.map((option) => (
               <li
                 className="select__option"
                 onClick={optionClicked(option)}
