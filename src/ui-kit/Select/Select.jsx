@@ -3,7 +3,15 @@ import Search from "../Search/Search";
 import "./Select.css";
 import React, { useEffect, useState } from "react";
 
-export default function Select({ placeholder, header, options, isSearch }) {
+export default function Select({
+  placeholder,
+  header,
+  options,
+  isSearch,
+  id,
+  errorText,
+  onChange,
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
   const [searchWord, setSearchWord] = useState("");
@@ -29,6 +37,9 @@ export default function Select({ placeholder, header, options, isSearch }) {
         header={header}
         onClickSelect={toggling}
         selectedValue={selectedOption}
+        id={id}
+        errorText={errorText}
+        onChange={onChange}
       />
 
       {isOpen && (

@@ -8,8 +8,8 @@ import InputSlider from "../InputSlider/InputSlider";
 export default function Input({
   id,
   placeholder,
+  defaultValue,
   header,
-  inputName,
   min,
   max,
   isSelect,
@@ -62,16 +62,16 @@ export default function Input({
         type="text"
         id={id}
         placeholder={placeholder}
-        name={inputName}
+        name={id}
         onChange={handleChange}
         onClick={onClickSelect}
-        value={selectedValue || value || min || ""}
+        value={defaultValue || selectedValue || value || min || ""}
       />
 
       {isSlider && (
         <InputSlider
           sliderText={sliderText}
-          inputName={`${inputName}-range`}
+          inputName={`${id}-range`}
           min={min}
           max={max}
           setValue={setValue}
