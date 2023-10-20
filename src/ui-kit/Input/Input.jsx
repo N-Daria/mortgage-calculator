@@ -26,11 +26,18 @@ export default function Input({
   errorText,
   onChange,
 }) {
-  function connectInputs() {
-    if (isSlider) {
+  const [value, setValue] = React.useState(0);
+
+  function handleChange({ target }) {
+    const newValue = Number(target.value);
+
+    if (isNaN(newValue)) {
+      return;
     } else {
-      onChange();
+      setValue(newValue);
     }
+
+    onChange();
   }
 
   return (
@@ -56,10 +63,9 @@ export default function Input({
         id={id}
         placeholder={placeholder}
         name={inputName}
-        // defaultValue={min || ""}
-        onChange={connectInputs}
+        onChange={handleChange}
         onClick={onClickSelect}
-        value={selectedValue || ""}
+        value={selectedValue || value || min || ""}
       />
 
       {isSlider && (
@@ -68,7 +74,8 @@ export default function Input({
           inputName={`${inputName}-range`}
           min={min}
           max={max}
-          connectInputs={connectInputs}
+          setValue={setValue}
+          value={value}
         />
       )}
 

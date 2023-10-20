@@ -35,8 +35,8 @@
 
 .input:hover,
 .input:focus {
-  outline: 1px #fbe54d solid;
-  border: 1px transparent solid;
+  border: 1px #fbe54d solid;
+  outline: 1px transparent solid;
 }
 
 .input_error {
