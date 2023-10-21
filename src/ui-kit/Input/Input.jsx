@@ -27,7 +27,7 @@ export default function Input({
   onChange,
   styles,
 }) {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(defaultValue);
 
   function handleChange({ target }) {
     const newValue = Number(target.value);
@@ -68,7 +68,7 @@ export default function Input({
         name={id}
         onChange={handleChange}
         onClick={onClickSelect}
-        value={defaultValue || selectedValue || value || min || ""}
+        value={selectedValue || value || ""}
       />
 
       {isSlider && (

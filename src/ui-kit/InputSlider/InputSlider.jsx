@@ -9,15 +9,9 @@ export default function InputSlider({
   value,
   setValue,
 }) {
-  const [background, setBackground] = React.useState(0);
-
   function handleChange({ target }) {
     setValue(target.value);
   }
-
-  useEffect(() => {
-    setBackground(value);
-  }, [value]);
 
   return (
     <div className="slider">
@@ -32,7 +26,7 @@ export default function InputSlider({
         // changes input background. Because of Tailwind only inline works
         style={{
           background: `linear-gradient(to right, #fbe54d ${
-            ((parseInt(background) - min) * 100) / (max - min)
+            ((parseInt(value) - min) * 100) / (max - min)
           }%, #333535 0px`,
         }}
       />

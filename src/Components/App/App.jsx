@@ -23,7 +23,7 @@ export default function App() {
               id="price"
               max={formOptions.price.max}
               min={formOptions.price.min}
-              defaultValue={formOptions.defaultValue}
+              defaultValue={formOptions.price.default}
               header="Стоимость недвижимости"
               inputName
               isIconCurrency={true}
