@@ -40,7 +40,7 @@ export default function Select({
         placeholder={placeholder}
         header={header}
         onClickSelect={toggling}
-        selectedValue={selectedOption}
+        defaultValue={selectedOption}
         id={id}
         errorText={errorText}
         onChange={onChange}

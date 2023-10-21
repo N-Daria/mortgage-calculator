@@ -4,6 +4,21 @@ export const formOptions = {
     default: 1000000,
     max: 10000000,
   },
+  initialFee: {
+    min: "25%",
+    default: "50",
+    max: "97%",
+  },
+  period: {
+    min: 4,
+    max: 30,
+    default: 30,
+    sliderText: ["года", "лет"],
+  },
+  monthlyPayment: {
+    default: "min",
+    sliderText: ["₪", "₪"],
+  },
   city: {
     options: [
       "Тель-авив",
@@ -22,10 +37,7 @@ export const formOptions = {
       "В ближайшие 6 месяцев",
     ],
   },
-  initialFee: {
-    min: "25%",
-    default: "50%",
-  },
+
   estateType: {
     options: [
       "Частный дом",
@@ -44,15 +56,5 @@ export const formOptions = {
       "somewhere",
       "sometimes",
     ],
-  },
-  period: {
-    min: 4,
-    max: 30,
-    default: 30,
-    sliderText: ["года", "лет"],
-  },
-  monthlyPayment: {
-    default: "min",
-    sliderText: ["₪", "₪"],
   },
 };

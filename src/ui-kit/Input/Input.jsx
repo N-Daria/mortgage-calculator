@@ -14,7 +14,6 @@ export default function Input({
   max,
   isSelect,
   onClickSelect,
-  selectedValue,
   isIconCurrency,
   isTooltip,
   tooltipText,
@@ -68,7 +67,7 @@ export default function Input({
         name={id}
         onChange={handleChange}
         onClick={onClickSelect}
-        value={selectedValue || value || ""}
+        value={value || defaultValue}
       />
 
       {isSlider && (
@@ -78,7 +77,7 @@ export default function Input({
           min={min}
           max={max}
           setValue={setValue}
-          value={value}
+          value={value || defaultValue}
         />
       )}
 
