@@ -79,9 +79,49 @@ export default function App() {
     //  ( процент + тело ) / время
   }
 
+  function countChangedPrice() {
+    const price = formData.price;
+    const periodYearsMin = formOptions.period.min;
+    const periodYearsMax = formOptions.period.max;
+    const mortgageRate = 5;
+
+    const monthlyPayment = countMonthlyPayment(formData.period).toFixed(3);
+    const monthlyPaymentMax = countMonthlyPayment(periodYearsMin).toFixed(3);
+    const monthlyPaymentMin = countMonthlyPayment(periodYearsMax).toFixed(3);
+
+    function countMonthlyPayment(time) {
+      const percents = mortgageRate * (price - formData.initialFee) * time;
+      const mortgageBody = price - formData.initialFee;
+      const periodMonths = time * 12;
+
+      return (percents + mortgageBody) / periodMonths;
+    }
+
+    // 25% of the cost
+    const initialFeeMin = price / 4;
+    // 97% of the cost
+    const initialFeeMax = price * 0.97;
+    const initialFeePercent = (formData.initialFee / price) * 100;
+
+    setFormMinMaxValues({
+      monthlyPaymentMin,
+      monthlyPaymentMax,
+      initialFeePercent,
+      initialFeeMin,
+      initialFeeMax,
+    });
+
+    dispatch(setPrice(price));
+    dispatch(setMonthlyPayment(monthlyPayment));
+  }
+
   useEffect(() => {
     countDefaultValues();
   }, []);
+
+  useEffect(() => {
+    countChangedPrice();
+  }, [formData.price]);
 
   return (
     <div className="app w-full bg-themeColor mx-auto px-[60px]">
