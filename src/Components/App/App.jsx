@@ -4,21 +4,33 @@ import Input from "../../ui-kit/Input/Input";
 import Select from "../../ui-kit/Select/Select";
 import { formOptions } from "../../mockData";
 import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setPrice,
+  setInitialFee,
+  setPeriod,
+  setMonthlyPayment,
+  setCity,
+  setEstimateTime,
+  setEstateType,
+  setHasEstate,
+} from "../../features/formSlice";
 
 export default function App() {
-  const [formValues, setFormValues] = React.useState({
-    price: 0,
-    monthlyPayment: 0,
+  const formData = useSelector((state) => state.formCollection.formData);
+  const dispatch = useDispatch();
+
+  const [formMinMaxValues, setFormMinMaxValues] = React.useState({
     monthlyPaymentMin: 0,
     monthlyPaymentMax: 0,
-    initialFee: 0,
     initialFeeMin: 0,
     initialFeeMax: 0,
     initialFeePercent: 0,
-    period: 0,
   });
 
-  function handleInputChange() {}
+  // function handleInputChange() {
+  //  periodMonths = (percents + mortgageBody) * monthlyPayment;
+  // }
 
   function countDefaultValues() {
     const price = formOptions.price.default;
@@ -41,25 +53,24 @@ export default function App() {
       return (percents + mortgageBody) / periodMonths;
     }
 
-    //  periodMonths = (percents + mortgageBody) * monthlyPayment;
-
     // 25% of the cost
     const initialFeeMin = price / 4;
     // 97% of the cost
     const initialFeeMax = price * 0.97;
     const initialFeePercent = formOptions.initialFee.default;
 
-    setFormValues({
-      price,
-      monthlyPayment,
+    setFormMinMaxValues({
       monthlyPaymentMin,
       monthlyPaymentMax,
-      initialFee,
       initialFeePercent,
       initialFeeMin,
       initialFeeMax,
-      period: periodYears,
     });
+
+    dispatch(setPrice(price));
+    dispatch(setInitialFee(initialFee));
+    dispatch(setPeriod(periodYears));
+    dispatch(setMonthlyPayment(monthlyPayment));
 
     // проценты всего = ставка * (стоимость недвижимости - первоначальный взнос) * срок
     // тело кредита = (стоимость недвижимости - первоначальный взнос)
@@ -83,13 +94,13 @@ export default function App() {
           <div className="flex gap-8 flex-wrap tablet:gap-y-[23px] tablet:gap-x-[68px] w-full desktop:gap-x-[77px]">
             <Input
               id="price"
-              max={formOptions?.price.max}
-              min={formOptions?.price.min}
-              defaultValue={formValues?.price}
+              max={formOptions.price.max}
+              min={formOptions.price.min}
+              defaultValue={formData.price}
               header="Стоимость недвижимости"
               inputName
               isIconCurrency={true}
-              onChange={handleInputChange}
+              onChange={setPrice}
               errorText="Стоимость недвижимости не может превышать 10,000,000"
               styles=""
             />
@@ -99,7 +110,7 @@ export default function App() {
               placeholder="Выберите ответ"
               header="Город покупки недвижимости"
               errorText="Выберите ответ"
-              onChange={handleInputChange}
+              onChange={setCity}
               options={formOptions.city.options}
               isSearch={true}
               styles="hidden tablet:block"
@@ -110,7 +121,7 @@ export default function App() {
               placeholder="Выберите период"
               header="Когда вы планируете оформить ипотеку?"
               errorText="Выберите ответ"
-              onChange={handleInputChange}
+              onChange={setEstimateTime}
               options={formOptions.estimateTime.options}
               styles=""
             />
@@ -119,9 +130,9 @@ export default function App() {
           <div className="flex gap-8 flex-wrap tablet:gap-y-[23px] tablet:gap-x-[68px] w-full desktop:gap-x-[77px]">
             <Input
               id="initialFee"
-              defaultValue={formValues.initialFee}
-              min={formValues.initialFeeMin}
-              max={formValues.initialFeeMax}
+              defaultValue={formData.initialFee}
+              min={formMinMaxValues.initialFeeMin}
+              max={formMinMaxValues.initialFeeMax}
               header="Первоначальный взнос"
               isIconCurrency={true}
               isTooltip={true}
@@ -155,18 +166,18 @@ export default function App() {
                   <p className="m-0">
                     Cумма финансирования:
                     <span className="font-semibold">
-                      {formValues.initialFee}₪
+                      {formData.price - formData.initialFee}₪
                     </span>
                   </p>
                   <p className="m-0">
                     Процент финансирования:
                     <span className="font-semibold">
-                      {formValues.initialFeePercent}%
+                      {formMinMaxValues.initialFeePercent}%
                     </span>
                   </p>
                 </div>
               }
-              onChange={handleInputChange}
+              onChange={setInitialFee}
               errorText="Сумма первоначального взноса не может быть меньше 25% от стоимости недвижимости"
               styles=""
             />
@@ -176,7 +187,7 @@ export default function App() {
               placeholder="Выберите тип недвижимости"
               header="Тип недвижимости"
               errorText="Выберите ответ"
-              onChange={handleInputChange}
+              onChange={setEstateType}
               options={formOptions.estateType.options}
               styles=""
             />
@@ -186,7 +197,7 @@ export default function App() {
               placeholder="Выберите ответ"
               header="Вы уже владеете недвижимостью?"
               errorText="Выберите ответ"
-              onChange={handleInputChange}
+              onChange={setHasEstate}
               options={formOptions.hasEstate.options}
               styles=""
             />
@@ -196,29 +207,29 @@ export default function App() {
         <fieldset className="form__fieldset w-full flex flex-wrap gap-8 tablet:gap-y-[23px] tablet:gap-x-[68px] tablet:pt-[24px] desktop:pt-0 relative">
           <Input
             id="period"
-            defaultValue={formValues.period}
+            defaultValue={formData.period}
             header="Срок ипотеки"
             max={formOptions.period.max}
             min={formOptions.period.min}
             isSlider={true}
             sliderText={formOptions.period.sliderText}
             errorText="Cрок ипотеки не может превышать 30 лет"
-            onChange={handleInputChange}
+            onChange={setPeriod}
           />
 
           <Input
             id="monthlyPayment"
-            defaultValue={formValues.monthlyPayment}
+            defaultValue={formData.monthlyPayment}
             header="Ежемесячный платеж"
-            max={formValues.monthlyPaymentMax}
-            min={formValues.monthlyPaymentMin}
+            max={formMinMaxValues.monthlyPaymentMax}
+            min={formMinMaxValues.monthlyPaymentMin}
             isIconCurrency={true}
             isMessage={true}
             messageText="Увеличьте ежемесячный платеж и переплачивайте меньше"
             isSlider={true}
             sliderText={formOptions.monthlyPayment.sliderText}
-            errorText={`Размер ежемесячного платежа не может быть меньше ${""} иначе ${"срок будет больше 30 лет"}`}
-            onChange={handleInputChange}
+            errorText={`Размер ежемесячного платежа не может быть меньше ${formMinMaxValues.monthlyPaymentMin} иначе срок будет больше 30 лет`}
+            onChange={setMonthlyPayment}
           />
         </fieldset>
 

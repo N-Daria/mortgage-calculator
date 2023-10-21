@@ -4,6 +4,7 @@ import React from "react";
 import Tooltip from "../Tooltip/Tooltip";
 import MessageInfo from "../MessageInfo/MessageInfo";
 import InputSlider from "../InputSlider/InputSlider";
+import { useDispatch } from "react-redux";
 
 export default function Input({
   id,
@@ -28,6 +29,8 @@ export default function Input({
 }) {
   const [value, setValue] = React.useState(defaultValue);
 
+  const dispatch = useDispatch();
+
   function handleChange({ target }) {
     const newValue = Number(target.value);
 
@@ -37,7 +40,7 @@ export default function Input({
       setValue(newValue);
     }
 
-    onChange();
+    dispatch(onChange(target.value));
   }
 
   return (
