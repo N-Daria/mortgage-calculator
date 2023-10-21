@@ -1,13 +1,23 @@
 {
   "files": {
-    "main.css": "/mortgage-calculator/static/css/main.073c9b0a.css",
-    "main.js": "/mortgage-calculator/static/js/main.0c15f56a.js",
+    "main.css": "/mortgage-calculator/static/css/main.b57cbd91.css",
+    "main.js": "/mortgage-calculator/static/js/main.ae0613e5.js",
+    "static/media/Inter-Regular.ttf": "/mortgage-calculator/static/media/Inter-Regular.9ca9ba81e9dcaa12b3a1.ttf",
+    "static/media/Roboto-Medium.ttf": "/mortgage-calculator/static/media/Roboto-Medium.7c8d04cd831df3033c8a.ttf",
+    "static/media/Roboto-Regular.ttf": "/mortgage-calculator/static/media/Roboto-Regular.fc2b5060f7accec5cf74.ttf",
+    "static/media/Currencies.svg": "/mortgage-calculator/static/media/Currencies.214868267d7a1b62f69e.svg",
+    "static/media/Info.svg": "/mortgage-calculator/static/media/Info.94181ff07acaba7da456.svg",
+    "static/media/WarningOctagon.svg": "/mortgage-calculator/static/media/WarningOctagon.86c3f1644cec23516453.svg",
+    "static/media/WarningCircle.svg": "/mortgage-calculator/static/media/WarningCircle.5b37fabb00c56458615e.svg",
+    "static/media/MagnifyingGlass.svg": "/mortgage-calculator/static/media/MagnifyingGlass.4b6bec76e2debadea073.svg",
+    "static/media/CaretDown.svg": "/mortgage-calculator/static/media/CaretDown.d90074e4b55e6ff3e348.svg",
     "index.html": "/mortgage-calculator/index.html",
-    "main.073c9b0a.css.map": "/mortgage-calculator/static/css/main.073c9b0a.css.map",
-    "main.0c15f56a.js.map": "/mortgage-calculator/static/js/main.0c15f56a.js.map"
+    "static/media/Check.svg": "/mortgage-calculator/static/media/Check.8e94ab11fc438a47b56d.svg",
+    "main.b57cbd91.css.map": "/mortgage-calculator/static/css/main.b57cbd91.css.map",
+    "main.ae0613e5.js.map": "/mortgage-calculator/static/js/main.ae0613e5.js.map"
   },
   "entrypoints": [
-    "static/css/main.073c9b0a.css",
-    "static/js/main.0c15f56a.js"
+    "static/css/main.b57cbd91.css",
+    "static/js/main.ae0613e5.js"
   ]
 }
