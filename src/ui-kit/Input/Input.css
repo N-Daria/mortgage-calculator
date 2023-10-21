@@ -2,10 +2,16 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  font-family: "Roboto", sans-serif;
-  font-size: 16px;
+  font-family: "Inter", sans-serif;
+  font-size: 20px;
   font-weight: 400;
-  line-height: 19px;
+  line-height: 28px;
+}
+
+@media (min-width: 890px) {
+  .input {
+    display: block;
+  }
 }
 
 .input__icon::before {
@@ -14,7 +20,7 @@
   background-position: center;
   background-repeat: no-repeat;
   right: 24px;
-  top: 48px;
+  top: 45px;
   position: absolute;
 }
 
@@ -23,6 +29,15 @@
   width: 20px;
   height: 20px;
   background-size: 20px;
+  right: 49px;
+  top: 49px;
+}
+
+@media (min-width: 890px) {
+  .input__icon_currency::before {
+    right: 21px;
+    top: 52px;
+  }
 }
 
 .input__icon_select::before {
@@ -52,5 +67,5 @@
   font-family: "Inter", sans-serif;
   font-size: 16px;
   font-weight: 500;
-  line-height: 22px;
+  line-height: 22.4px;
 }

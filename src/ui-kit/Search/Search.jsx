@@ -15,7 +15,7 @@ export default function Search({ id, setSearchWord }) {
         name={id}
         id={id}
         placeholder="Поиск.."
-        className="search__input w-full bg-baseColor rounded-[5px] border-borderColor py-2 pr-4 pl-11 border"
+        className="search__input w-full bg-baseColor rounded-[5px] border-borderColor py-[6px] pr-4 pl-[42px] border"
         onInput={handleChange}
       />
     </div>

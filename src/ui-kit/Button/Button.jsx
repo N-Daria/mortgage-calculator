@@ -1,10 +1,11 @@
 import "./Button.css";
 
-export default function Button({ textButton }) {
+export default function Button({ textButton, isDisabled }) {
   return (
     <button
       type="submit"
-      className="button block w-full bg-yellow text-textDark rounded-[17px] mt-6 tablet:mx-0 py-[17px]  tablet:max-w-[249px] tablet:rounded-lg tablet:ml-auto tablet:mt-8"
+      disabled={isDisabled}
+      className="button block w-full bg-yellow text-textDark rounded-lg mt-6 py-[17px] tablet:mx-0 tablet:max-w-[249px] tablet:rounded-lg tablet:ml-auto tablet:mt-8"
     >
       {textButton}
     </button>

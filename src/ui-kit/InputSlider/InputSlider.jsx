@@ -40,10 +40,10 @@ export default function InputSlider({
       {sliderText && (
         <div className="flex justify-between">
           <p className="slider__text m-0 pt-[6px]">
-            {min} {sliderText}
+            {min} {sliderText[0]}
           </p>
           <p className="slider__text m-0 pt-[6px]">
-            {max} {sliderText}
+            {max} {sliderText[1]}
           </p>
         </div>
       )}

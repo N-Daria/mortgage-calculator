@@ -1,11 +1,17 @@
 .button {
   line-height: 22.4px;
   font-size: 16px;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
 }
 
 .button:disabled {
   background-color: #2d2d2d;
   color: #848484;
+}
+
+.button:disabled:hover {
+  opacity: 1;
 }
 
 .button:hover {

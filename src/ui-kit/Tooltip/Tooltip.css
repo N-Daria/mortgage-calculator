@@ -23,6 +23,7 @@
   font-weight: 400;
   line-height: 20px;
   text-align: left;
+  z-index: 11;
 }
 
 .tooltip__text::before {

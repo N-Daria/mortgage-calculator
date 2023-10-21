@@ -1,6 +1,6 @@
+import "./Select.css";
 import Input from "../Input/Input";
 import Search from "../Search/Search";
-import "./Select.css";
 import React, { useEffect, useState } from "react";
 
 export default function Select({
@@ -11,6 +11,8 @@ export default function Select({
   id,
   errorText,
   onChange,
+  styles,
+  isError,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
@@ -30,7 +32,9 @@ export default function Select({
   }, [searchWord]);
 
   return (
-    <div className="select relative">
+    <div
+      className={`select relative w-full ${styles} max-w-mainContentM tablet:max-w-[325px]`}
+    >
       <Input
         isSelect={true}
         placeholder={placeholder}
@@ -40,10 +44,11 @@ export default function Select({
         id={id}
         errorText={errorText}
         onChange={onChange}
+        isError={isError}
       />
 
       {isOpen && (
-        <div className="select__dropdown-block w-full bg-secondaryColor rounded-lg border-borderColor py-2 border absolute top-[92px]">
+        <div className="select__dropdown-block w-full bg-secondaryColor rounded-lg border-borderColor py-2 border absolute top-[92px] :tablet">
           {isSearch && (
             <Search searchWord={searchWord} setSearchWord={setSearchWord} />
           )}
@@ -51,7 +56,9 @@ export default function Select({
           <ul className="select__dropdown">
             {filteredOption?.map((option) => (
               <li
-                className="select__option"
+                className={`select__option ${
+                  selectedOption === option ? "select__option_checked" : ""
+                }`}
                 onClick={optionClicked(option)}
                 key={Math.random()}
               >

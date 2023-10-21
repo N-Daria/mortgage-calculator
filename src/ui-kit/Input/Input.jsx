@@ -25,6 +25,7 @@ export default function Input({
   isError,
   errorText,
   onChange,
+  styles,
 }) {
   const [value, setValue] = React.useState(0);
 
@@ -41,14 +42,16 @@ export default function Input({
   }
 
   return (
-    <div className="m-w-mainContentM tablet:m-w-[325px] w-full relative">
+    <div
+      className={`max-w-mainContentM tablet:max-w-[325px] w-full relative ${styles}`}
+    >
       <div className="mb-3 flex">
         <label
           htmlFor={id}
           className={`${
             (isIconCurrency && "input__icon input__icon_currency") ||
             (isSelect && "input__icon input__icon_select")
-          } input__header m-0 mr-[6px]`}
+          } input__header m-0`}
         >
           {header}
         </label>

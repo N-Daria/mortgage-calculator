@@ -50,13 +50,10 @@ export const formOptions = {
     min: 4,
     max: 30,
     default: 30,
-    sliderText: (value) => {
-      const result = value?.substr(value.length - 1).match(/[1-4]/);
-      return result ? "года" : "лет";
-    },
+    sliderText: ["года", "лет"],
   },
   monthlyPayment: {
     default: "min",
-    sliderText: "₪",
+    sliderText: ["₪", "₪"],
   },
 };

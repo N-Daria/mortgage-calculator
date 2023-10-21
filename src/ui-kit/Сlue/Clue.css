@@ -1,8 +1,8 @@
 .clue__text {
-  font-size: 12px;
-  line-height: 16.8px;
   font-family: "Roboto", sans-serif;
+  font-size: 12px;
   font-weight: 400;
+  line-height: 17px;
 }
 
 .clue__text::before {
