@@ -5,51 +5,32 @@ import Select from "../../ui-kit/Select/Select";
 import { formOptions } from "../../mockData";
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  setPrice,
-  setInitialFee,
-  setPeriod,
-  setMonthlyPayment,
-  setCity,
-  setEstimateTime,
-  setEstateType,
-  setHasEstate,
-} from "../../features/formSlice";
+import { updateState, resetForm, sendForm } from "../../features/formSlice";
 import { useFormik } from "formik";
 import { mortgageSchema } from "../../schemas/mortgageSchema";
 
 export default function App() {
-  // const formData = useSelector((state) => state.formCollection.formData);
+  const formData = useSelector((state) => state.formCollection);
   const dispatch = useDispatch();
 
-  const {
-    values,
-    errors,
-    handleChange,
-    handleSubmit,
-    setFieldValue,
-    isValid,
-    touched,
-  } = useFormik({
-    initialValues: {
-      price: 0,
-      initialFee: 0,
-      period: 0,
-      monthlyPayment: 0,
-      city: "",
-      estimateTime: "",
-      estateType: "",
-      hasEstate: "",
-    },
-    validationSchema: mortgageSchema,
+  function handleSubmit(e) {
+    e.preventDefault();
 
-    onSubmit,
-  });
+    dispatch(updateState(values));
+    dispatch(sendForm(values)).then(() => {
+      dispatch(resetForm());
 
-  function onSubmit(values, actions) {
-    debugger;
-    console.log(values);
+      alert("data has been send");
+
+      countDefaultValues();
+    });
   }
+
+  const { values, errors, handleChange, setFieldValue, isValid, touched } =
+    useFormik({
+      initialValues: formData.formData,
+      validationSchema: mortgageSchema,
+    });
 
   const [formMinMaxValues, setFormMinMaxValues] = React.useState({
     monthlyPaymentMin: 0,
@@ -113,6 +94,10 @@ export default function App() {
     setFieldValue("initialFee", initialFee, true);
     setFieldValue("period", periodYears, true);
     setFieldValue("monthlyPayment", monthlyPayment, true);
+    setFieldValue("city", "", true);
+    setFieldValue("estimateTime", "", true);
+    setFieldValue("estateType", "", true);
+    setFieldValue("hasEstate", "", true);
   }
 
   function countChangedPrice() {
@@ -280,7 +265,6 @@ export default function App() {
                   </p>
                 </div>
               }
-              // messageText={formData.initialFee}
               onChange={handleChange}
               isError={errors.initialFee}
               errorText={errors.initialFee}
@@ -349,7 +333,10 @@ export default function App() {
         </fieldset>
 
         <div className="w-full form__button-block bg-secondaryColor tablet:bg-inherit pb-6">
-          <Button textButton="Продолжить" isDisabled={!isValid} />
+          <Button
+            textButton="Продолжить"
+            isDisabled={!isValid || formData.loading}
+          />
         </div>
       </form>
     </div>
