@@ -32,32 +32,39 @@ export default function App() {
   //  periodMonths = (percents + mortgageBody) * monthlyPayment;
   // }
 
-  function countDefaultValues() {
-    const price = formOptions.price.default;
-    // 50% of the cost
-    const initialFee = price / 2;
-    const periodYears = formOptions.period.default;
-    const periodYearsMin = formOptions.period.min;
-    const periodYearsMax = formOptions.period.max;
+  function countMonthlyPayment(time, price, initialFee) {
     const mortgageRate = 5;
 
-    const monthlyPayment = countMonthlyPayment(periodYears).toFixed(3);
-    const monthlyPaymentMax = countMonthlyPayment(periodYearsMin).toFixed(3);
-    const monthlyPaymentMin = countMonthlyPayment(periodYearsMax).toFixed(3);
+    const percents = mortgageRate * (price - initialFee) * time;
+    const mortgageBody = price - initialFee;
+    const periodMonths = time * 12;
 
-    function countMonthlyPayment(time) {
-      const percents = mortgageRate * (price - initialFee) * time;
-      const mortgageBody = price - initialFee;
-      const periodMonths = time * 12;
+    return ((percents + mortgageBody) / periodMonths).toFixed(3);
+  }
 
-      return (percents + mortgageBody) / periodMonths;
-    }
-
+  function updateFormMinMaxValues(price) {
     // 25% of the cost
     const initialFeeMin = price / 4;
-    // 97% of the cost
-    const initialFeeMax = price * 0.97;
-    const initialFeePercent = formOptions.initialFee.default;
+    // 10% of the cost
+    const initialFeeMax = price;
+
+    const initialFee = price / 2;
+
+    const periodYearsMin = formOptions.period.min;
+    const periodYearsMax = formOptions.period.max;
+
+    const monthlyPaymentMax = countMonthlyPayment(
+      periodYearsMin,
+      price,
+      initialFee
+    );
+    const monthlyPaymentMin = countMonthlyPayment(
+      periodYearsMax,
+      price,
+      initialFee
+    );
+
+    const initialFeePercent = (initialFee / price) * 100;
 
     setFormMinMaxValues({
       monthlyPaymentMin,
@@ -66,6 +73,17 @@ export default function App() {
       initialFeeMin,
       initialFeeMax,
     });
+  }
+
+  function countDefaultValues() {
+    const price = formOptions.price.default;
+    // 50% of the cost
+    const initialFee = price / 2;
+    const periodYears = formOptions.period.default;
+
+    const monthlyPayment = countMonthlyPayment(periodYears, price, initialFee);
+
+    updateFormMinMaxValues(price);
 
     dispatch(setPrice(price));
     dispatch(setInitialFee(initialFee));
@@ -81,37 +99,18 @@ export default function App() {
 
   function countChangedPrice() {
     const price = formData.price;
-    const periodYearsMin = formOptions.period.min;
-    const periodYearsMax = formOptions.period.max;
-    const mortgageRate = 5;
+    const initialFee = price / 2;
 
-    const monthlyPayment = countMonthlyPayment(formData.period).toFixed(3);
-    const monthlyPaymentMax = countMonthlyPayment(periodYearsMin).toFixed(3);
-    const monthlyPaymentMin = countMonthlyPayment(periodYearsMax).toFixed(3);
+    const monthlyPayment = countMonthlyPayment(
+      formData.period,
+      price,
+      initialFee
+    );
 
-    function countMonthlyPayment(time) {
-      const percents = mortgageRate * (price - formData.initialFee) * time;
-      const mortgageBody = price - formData.initialFee;
-      const periodMonths = time * 12;
-
-      return (percents + mortgageBody) / periodMonths;
-    }
-
-    // 25% of the cost
-    const initialFeeMin = price / 4;
-    // 97% of the cost
-    const initialFeeMax = price * 0.97;
-    const initialFeePercent = (formData.initialFee / price) * 100;
-
-    setFormMinMaxValues({
-      monthlyPaymentMin,
-      monthlyPaymentMax,
-      initialFeePercent,
-      initialFeeMin,
-      initialFeeMax,
-    });
+    updateFormMinMaxValues(price);
 
     dispatch(setPrice(price));
+    dispatch(setInitialFee(initialFee));
     dispatch(setMonthlyPayment(monthlyPayment));
   }
 
@@ -120,7 +119,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    countChangedPrice();
+    formData.price && countChangedPrice();
   }, [formData.price]);
 
   return (

@@ -7,7 +7,7 @@ export const formOptions = {
   initialFee: {
     min: "25%",
     default: "50",
-    max: "97%",
+    max: "100%",
   },
   period: {
     min: 4,
