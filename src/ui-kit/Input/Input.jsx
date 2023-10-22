@@ -38,9 +38,8 @@ export default function Input({
       return;
     } else {
       setValue(newValue);
+      dispatch(onChange(newValue));
     }
-
-    dispatch(onChange(value));
   }
 
   return (
