@@ -123,6 +123,18 @@ export default function App() {
     dispatch(setMonthlyPayment(monthlyPayment));
   }
 
+  function countChangedPeriod() {
+    const price = formData.price;
+    const initialFee = formData.initialFee;
+    const periodYears = formData.period;
+
+    const monthlyPayment = countMonthlyPayment(periodYears, price, initialFee);
+
+    updateFormMinMaxValues(price, initialFee);
+
+    dispatch(setMonthlyPayment(monthlyPayment));
+  }
+
   useEffect(() => {
     countDefaultValues();
   }, []);
@@ -134,6 +146,10 @@ export default function App() {
   useEffect(() => {
     formData.initialFee && countChangedInitialFee();
   }, [formData.initialFee]);
+
+  useEffect(() => {
+    formData.period && countChangedPeriod();
+  }, [formData.period]);
 
   return (
     <div className="app w-full bg-themeColor mx-auto px-[60px]">
