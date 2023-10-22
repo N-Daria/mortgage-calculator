@@ -31,8 +31,8 @@ export default function Input({
 
   const dispatch = useDispatch();
 
-  function handleChange({ target }) {
-    const newValue = Number(target.value);
+  function handleChange(event) {
+    const newValue = Number(event.target.value);
 
     if (isNaN(newValue)) {
       return;
@@ -40,7 +40,7 @@ export default function Input({
       setValue(newValue);
     }
 
-    dispatch(onChange(target.value));
+    dispatch(onChange(value));
   }
 
   return (
@@ -79,12 +79,12 @@ export default function Input({
           inputName={`${id}-range`}
           min={min}
           max={max}
-          setValue={setValue}
+          onChange={handleChange}
           value={value || defaultValue}
         />
       )}
 
-      {isMessage && <MessageInfo tooltipText={messageText} />}
+      {isMessage && <MessageInfo messageText={messageText} />}
       {isError && <Clue text={errorText} isError={isError} />}
     </div>
   );

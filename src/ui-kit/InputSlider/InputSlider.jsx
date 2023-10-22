@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import "./InputSlider.css";
 
 export default function InputSlider({
@@ -7,10 +6,10 @@ export default function InputSlider({
   max,
   inputName,
   value,
-  setValue,
+  onChange,
 }) {
-  function handleChange({ target }) {
-    setValue(target.value);
+  function handleChange(event) {
+    onChange(event);
   }
 
   return (
