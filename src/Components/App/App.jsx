@@ -28,15 +28,11 @@ export default function App() {
     initialFeePercent: 0,
   });
 
-  // function handleInputChange() {
-  //  periodMonths = (percents + mortgageBody) * monthlyPayment;
-  // }
-
   function countMonthlyPayment(time, price, initialFee) {
     const mortgageRate = 5;
 
-    const percents = mortgageRate * (price - initialFee) * time;
     const mortgageBody = price - initialFee;
+    const percents = mortgageRate * mortgageBody * time;
     const periodMonths = time * 12;
 
     return ((percents + mortgageBody) / periodMonths).toFixed(3);
@@ -87,28 +83,19 @@ export default function App() {
     dispatch(setInitialFee(initialFee));
     dispatch(setPeriod(periodYears));
     dispatch(setMonthlyPayment(monthlyPayment));
-
-    // проценты всего = ставка * (стоимость недвижимости - первоначальный взнос) * срок
-    // тело кредита = (стоимость недвижимости - первоначальный взнос)
-    // время = ( срок * 12 )
-
-    //  ( процент + тело ) / время
   }
 
   function countChangedPrice() {
     const price = formData.price;
-    const initialFee = price / 2;
+    const initialFee = formData.initialFee;
+
     const monthlyPayment = countMonthlyPayment(
       formData.period,
       price,
       initialFee
     );
 
-    dispatch(setInitialFee(initialFee));
     dispatch(setMonthlyPayment(monthlyPayment));
-
-    countChangedInitialFee();
-
     updateFormMinMaxValues(price, initialFee);
   }
 
@@ -135,6 +122,8 @@ export default function App() {
     dispatch(setMonthlyPayment(monthlyPayment));
   }
 
+  function countChangedMonthlyPayment() {}
+
   useEffect(() => {
     countDefaultValues();
   }, []);
@@ -150,6 +139,10 @@ export default function App() {
   useEffect(() => {
     formData.period && countChangedPeriod();
   }, [formData.period]);
+
+  useEffect(() => {
+    formData.monthlyPayment && countChangedMonthlyPayment();
+  }, [formData.monthlyPayment]);
 
   return (
     <div className="app w-full bg-themeColor mx-auto px-[60px]">
