@@ -15,10 +15,33 @@ import {
   setEstateType,
   setHasEstate,
 } from "../../features/formSlice";
+import { useFormik } from "formik";
+import { mortgageSchema } from "../../schemas";
 
 export default function App() {
-  const formData = useSelector((state) => state.formCollection.formData);
+  // const formData = useSelector((state) => state.formCollection.formData);
   const dispatch = useDispatch();
+
+  const { values, errors, handleChange, handleSubmit, setFieldValue, touched } =
+    useFormik({
+      initialValues: {
+        price: 0,
+        initialFee: 0,
+        period: 0,
+        monthlyPayment: 0,
+        city: "",
+        estimateTime: "",
+        estateType: "",
+        hasEstate: "",
+      },
+      validationSchema: mortgageSchema,
+
+      onSubmit,
+    });
+
+  function onSubmit() {
+    console.log(values);
+  }
 
   const [formMinMaxValues, setFormMinMaxValues] = React.useState({
     monthlyPaymentMin: 0,
@@ -74,52 +97,51 @@ export default function App() {
     // 50% of the cost
     const initialFee = price / 2;
     const periodYears = formOptions.period.default;
-
     const monthlyPayment = countMonthlyPayment(periodYears, price, initialFee);
 
     updateFormMinMaxValues(price, initialFee);
 
-    dispatch(setPrice(price));
-    dispatch(setInitialFee(initialFee));
-    dispatch(setPeriod(periodYears));
-    dispatch(setMonthlyPayment(monthlyPayment));
+    setFieldValue("price", price, true);
+    setFieldValue("initialFee", initialFee, true);
+    setFieldValue("period", periodYears, true);
+    setFieldValue("monthlyPayment", monthlyPayment, true);
   }
 
   function countChangedPrice() {
-    const price = formData.price;
-    const initialFee = formData.initialFee;
+    const price = values.price;
+    const initialFee = values.initialFee;
 
     const monthlyPayment = countMonthlyPayment(
-      formData.period,
+      values.period,
       price,
       initialFee
     );
 
-    dispatch(setMonthlyPayment(monthlyPayment));
+    setFieldValue("monthlyPayment", monthlyPayment, true);
     updateFormMinMaxValues(price, initialFee);
   }
 
   function countChangedInitialFee() {
-    const price = formData.price;
-    const initialFee = formData.initialFee;
+    const price = values.price;
+    const initialFee = values.initialFee;
 
     const periodYears = formOptions.period.default;
     const monthlyPayment = countMonthlyPayment(periodYears, price, initialFee);
     updateFormMinMaxValues(price, initialFee);
 
-    dispatch(setMonthlyPayment(monthlyPayment));
+    setFieldValue("monthlyPayment", monthlyPayment, true);
   }
 
   function countChangedPeriod() {
-    const price = formData.price;
-    const initialFee = formData.initialFee;
-    const periodYears = formData.period;
+    const price = values.price;
+    const initialFee = values.initialFee;
+    const periodYears = values.period;
 
     const monthlyPayment = countMonthlyPayment(periodYears, price, initialFee);
 
     updateFormMinMaxValues(price, initialFee);
 
-    dispatch(setMonthlyPayment(monthlyPayment));
+    setFieldValue("monthlyPayment", monthlyPayment, true);
   }
 
   function countChangedMonthlyPayment() {}
@@ -129,24 +151,27 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    formData.price && countChangedPrice();
-  }, [formData.price]);
+    values.price && countChangedPrice();
+  }, [values.price]);
 
   useEffect(() => {
-    formData.initialFee && countChangedInitialFee();
-  }, [formData.initialFee]);
+    values.initialFee && countChangedInitialFee();
+  }, [values.initialFee]);
 
   useEffect(() => {
-    formData.period && countChangedPeriod();
-  }, [formData.period]);
+    values.period && countChangedPeriod();
+  }, [values.period]);
 
   useEffect(() => {
-    formData.monthlyPayment && countChangedMonthlyPayment();
-  }, [formData.monthlyPayment]);
+    values.monthlyPayment && countChangedMonthlyPayment();
+  }, [values.monthlyPayment]);
 
   return (
     <div className="app w-full bg-themeColor mx-auto px-[60px]">
-      <form className="form text-white pt-120 w-full flex flex-wrap gap-8 mx-auto max-w-mainContentM tablet:max-w-mainContentT desktop:max-w-mainContentD">
+      <form
+        onSubmit={handleSubmit}
+        className="form text-white pt-120 w-full flex flex-wrap gap-8 mx-auto max-w-mainContentM tablet:max-w-mainContentT desktop:max-w-mainContentD"
+      >
         <h1 className="form__header tablet:text-5xl">
           Рассчитайте ипотеку быстро и просто
         </h1>
@@ -157,41 +182,49 @@ export default function App() {
               id="price"
               max={formOptions.price.max}
               min={formOptions.price.min}
-              defaultValue={formData.price}
               header="Стоимость недвижимости"
               inputName
               isIconCurrency={true}
-              onChange={setPrice}
-              errorText="Стоимость недвижимости не может превышать 10,000,000"
+              // onChange={setPrice}
               styles=""
+              onChange={handleChange}
+              defaultValue={values.price}
+              value={values.price}
+              isError={errors.price}
+              errorText={errors.price}
             />
 
             <Select
               id="city"
               placeholder="Выберите ответ"
               header="Город покупки недвижимости"
-              errorText="Выберите ответ"
-              onChange={setCity}
+              onChange={setFieldValue}
               options={formOptions.city.options}
               isSearch={true}
               styles="hidden tablet:block"
+              isError={touched.city && errors.city}
+              errorText={errors.city}
+              value={values.city}
             />
 
             <Select
               id="estimateTime"
               placeholder="Выберите период"
               header="Когда вы планируете оформить ипотеку?"
-              errorText="Выберите ответ"
-              onChange={setEstimateTime}
+              onChange={setFieldValue}
               options={formOptions.estimateTime.options}
               styles=""
+              isError={touched.estimateTime && errors.estimateTime}
+              errorText={errors.city}
+              value={values.estimateTime}
             />
           </div>
 
           <div className="flex gap-8 flex-wrap tablet:gap-y-[23px] tablet:gap-x-[68px] w-full desktop:gap-x-[77px]">
             <Input
               id="initialFee"
-              defaultValue={formData.initialFee}
+              defaultValue={values.initialFee}
+              value={values.initialFee}
               min={formMinMaxValues.initialFeeMin}
               max={formMinMaxValues.initialFeeMax}
               header="Первоначальный взнос"
@@ -227,7 +260,7 @@ export default function App() {
                   <p className="m-0">
                     Cумма финансирования:
                     <span className="font-semibold">
-                      {formData.price - formData.initialFee}₪
+                      {values.price - values.initialFee}₪
                     </span>
                   </p>
                   <p className="m-0">
@@ -239,8 +272,9 @@ export default function App() {
                 </div>
               }
               // messageText={formData.initialFee}
-              onChange={setInitialFee}
-              errorText="Сумма первоначального взноса не может быть меньше 25% от стоимости недвижимости"
+              onChange={handleChange}
+              isError={errors.initialFee}
+              errorText={errors.initialFee}
               styles=""
             />
 
@@ -248,20 +282,24 @@ export default function App() {
               id="estateType"
               placeholder="Выберите тип недвижимости"
               header="Тип недвижимости"
-              errorText="Выберите ответ"
-              onChange={setEstateType}
+              onChange={setFieldValue}
               options={formOptions.estateType.options}
               styles=""
+              isError={touched.estateType && errors.estateType}
+              errorText={errors.estateType}
+              value={values.estateType}
             />
 
             <Select
               id="hasEstate"
               placeholder="Выберите ответ"
               header="Вы уже владеете недвижимостью?"
-              errorText="Выберите ответ"
-              onChange={setHasEstate}
+              onChange={setFieldValue}
               options={formOptions.hasEstate.options}
               styles=""
+              isError={touched.hasEstate && errors.hasEstate}
+              errorText={errors.hasEstate}
+              value={values.hasEstate}
             />
           </div>
         </fieldset>
@@ -269,19 +307,22 @@ export default function App() {
         <fieldset className="form__fieldset w-full flex flex-wrap gap-8 tablet:gap-y-[23px] tablet:gap-x-[68px] tablet:pt-[24px] desktop:pt-0 relative">
           <Input
             id="period"
-            defaultValue={formData.period}
+            defaultValue={values.period}
+            value={values.period}
             header="Срок ипотеки"
             max={formOptions.period.max}
             min={formOptions.period.min}
             isSlider={true}
             sliderText={formOptions.period.sliderText}
-            errorText="Cрок ипотеки не может превышать 30 лет"
-            onChange={setPeriod}
+            onChange={handleChange}
+            isError={errors.period}
+            errorText={errors.period}
           />
 
           <Input
             id="monthlyPayment"
-            defaultValue={formData.monthlyPayment}
+            defaultValue={values.monthlyPayment}
+            value={values.monthlyPayment}
             header="Ежемесячный платеж"
             max={formMinMaxValues.monthlyPaymentMax}
             min={formMinMaxValues.monthlyPaymentMin}
@@ -290,8 +331,9 @@ export default function App() {
             messageText="Увеличьте ежемесячный платеж и переплачивайте меньше"
             isSlider={true}
             sliderText={formOptions.monthlyPayment.sliderText}
-            errorText={`Размер ежемесячного платежа не может быть меньше ${formMinMaxValues.monthlyPaymentMin} иначе срок будет больше 30 лет`}
-            onChange={setMonthlyPayment}
+            onChange={handleChange}
+            isError={errors.monthlyPayment}
+            errorText={errors.monthlyPayment}
           />
         </fieldset>
 

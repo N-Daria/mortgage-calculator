@@ -13,16 +13,16 @@ export default function Select({
   onChange,
   styles,
   isError,
+  value,
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("");
   const [searchWord, setSearchWord] = useState("");
   const [filteredOption, setFilteredOption] = useState(options);
 
   const toggling = () => setIsOpen(!isOpen);
 
   const optionClicked = (value) => () => {
-    setSelectedOption(value);
+    onChange(`${id}`, value, true);
     setIsOpen(false);
   };
 
@@ -40,10 +40,9 @@ export default function Select({
         placeholder={placeholder}
         header={header}
         onClickSelect={toggling}
-        defaultValue={selectedOption}
+        value={value}
         id={id}
         errorText={errorText}
-        onChange={onChange}
         isError={isError}
       />
 
@@ -57,7 +56,7 @@ export default function Select({
             {filteredOption?.map((option) => (
               <li
                 className={`select__option ${
-                  selectedOption === option ? "select__option_checked" : ""
+                  value === option ? "select__option_checked" : ""
                 }`}
                 onClick={optionClicked(option)}
                 key={Math.random()}

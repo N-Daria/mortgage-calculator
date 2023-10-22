@@ -4,7 +4,6 @@ import React from "react";
 import Tooltip from "../Tooltip/Tooltip";
 import MessageInfo from "../MessageInfo/MessageInfo";
 import InputSlider from "../InputSlider/InputSlider";
-import { useDispatch } from "react-redux";
 
 export default function Input({
   id,
@@ -26,22 +25,8 @@ export default function Input({
   errorText,
   onChange,
   styles,
+  value,
 }) {
-  const [value, setValue] = React.useState(defaultValue);
-
-  const dispatch = useDispatch();
-
-  function handleChange(event) {
-    const newValue = Number(event.target.value);
-
-    if (isNaN(newValue)) {
-      return;
-    } else {
-      setValue(newValue);
-      dispatch(onChange(newValue));
-    }
-  }
-
   return (
     <div
       className={`max-w-mainContentM tablet:max-w-[325px] w-full relative ${styles}`}
@@ -67,7 +52,7 @@ export default function Input({
         id={id}
         placeholder={placeholder}
         name={id}
-        onChange={handleChange}
+        onChange={onChange}
         onClick={onClickSelect}
         value={value || defaultValue}
       />
@@ -78,7 +63,7 @@ export default function Input({
           inputName={`${id}-range`}
           min={min}
           max={max}
-          onChange={handleChange}
+          onChange={onChange}
           value={value || defaultValue}
         />
       )}
