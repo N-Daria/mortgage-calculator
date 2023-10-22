@@ -42,13 +42,11 @@ export default function App() {
     return ((percents + mortgageBody) / periodMonths).toFixed(3);
   }
 
-  function updateFormMinMaxValues(price) {
+  function updateFormMinMaxValues(price, initialFee) {
     // 25% of the cost
     const initialFeeMin = price / 4;
-    // 10% of the cost
+    // 100% of the cost
     const initialFeeMax = price;
-
-    const initialFee = price / 2;
 
     const periodYearsMin = formOptions.period.min;
     const periodYearsMax = formOptions.period.max;
@@ -64,7 +62,7 @@ export default function App() {
       initialFee
     );
 
-    const initialFeePercent = (initialFee / price) * 100;
+    const initialFeePercent = ((initialFee / price) * 100).toFixed(1);
 
     setFormMinMaxValues({
       monthlyPaymentMin,
@@ -83,7 +81,7 @@ export default function App() {
 
     const monthlyPayment = countMonthlyPayment(periodYears, price, initialFee);
 
-    updateFormMinMaxValues(price);
+    updateFormMinMaxValues(price, initialFee);
 
     dispatch(setPrice(price));
     dispatch(setInitialFee(initialFee));
@@ -100,17 +98,28 @@ export default function App() {
   function countChangedPrice() {
     const price = formData.price;
     const initialFee = price / 2;
-
     const monthlyPayment = countMonthlyPayment(
       formData.period,
       price,
       initialFee
     );
 
-    updateFormMinMaxValues(price);
-
-    dispatch(setPrice(price));
     dispatch(setInitialFee(initialFee));
+    dispatch(setMonthlyPayment(monthlyPayment));
+
+    countChangedInitialFee();
+
+    updateFormMinMaxValues(price, initialFee);
+  }
+
+  function countChangedInitialFee() {
+    const price = formData.price;
+    const initialFee = formData.initialFee;
+
+    const periodYears = formOptions.period.default;
+    const monthlyPayment = countMonthlyPayment(periodYears, price, initialFee);
+    updateFormMinMaxValues(price, initialFee);
+
     dispatch(setMonthlyPayment(monthlyPayment));
   }
 
@@ -121,6 +130,10 @@ export default function App() {
   useEffect(() => {
     formData.price && countChangedPrice();
   }, [formData.price]);
+
+  useEffect(() => {
+    formData.initialFee && countChangedInitialFee();
+  }, [formData.initialFee]);
 
   return (
     <div className="app w-full bg-themeColor mx-auto px-[60px]">
@@ -216,6 +229,7 @@ export default function App() {
                   </p>
                 </div>
               }
+              // messageText={formData.initialFee}
               onChange={setInitialFee}
               errorText="Сумма первоначального взноса не может быть меньше 25% от стоимости недвижимости"
               styles=""
