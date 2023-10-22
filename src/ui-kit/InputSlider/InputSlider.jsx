@@ -7,9 +7,10 @@ export default function InputSlider({
   inputName,
   value,
   onChange,
+  id,
 }) {
-  function handleChange(event) {
-    onChange(event);
+  function handleChange({ target }) {
+    onChange(`${id}`, target.value, true);
   }
 
   return (

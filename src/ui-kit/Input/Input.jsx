@@ -26,6 +26,7 @@ export default function Input({
   onChange,
   styles,
   value,
+  sliderOnChange,
 }) {
   return (
     <div
@@ -61,9 +62,10 @@ export default function Input({
         <InputSlider
           sliderText={sliderText}
           inputName={`${id}-range`}
+          id={id}
           min={min}
           max={max}
-          onChange={onChange}
+          onChange={sliderOnChange}
           value={value || defaultValue}
         />
       )}

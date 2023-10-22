@@ -16,30 +16,38 @@ import {
   setHasEstate,
 } from "../../features/formSlice";
 import { useFormik } from "formik";
-import { mortgageSchema } from "../../schemas";
+import { mortgageSchema } from "../../schemas/mortgageSchema";
 
 export default function App() {
   // const formData = useSelector((state) => state.formCollection.formData);
   const dispatch = useDispatch();
 
-  const { values, errors, handleChange, handleSubmit, setFieldValue, touched } =
-    useFormik({
-      initialValues: {
-        price: 0,
-        initialFee: 0,
-        period: 0,
-        monthlyPayment: 0,
-        city: "",
-        estimateTime: "",
-        estateType: "",
-        hasEstate: "",
-      },
-      validationSchema: mortgageSchema,
+  const {
+    values,
+    errors,
+    handleChange,
+    handleSubmit,
+    setFieldValue,
+    isValid,
+    touched,
+  } = useFormik({
+    initialValues: {
+      price: 0,
+      initialFee: 0,
+      period: 0,
+      monthlyPayment: 0,
+      city: "",
+      estimateTime: "",
+      estateType: "",
+      hasEstate: "",
+    },
+    validationSchema: mortgageSchema,
 
-      onSubmit,
-    });
+    onSubmit,
+  });
 
-  function onSubmit() {
+  function onSubmit(values, actions) {
+    debugger;
     console.log(values);
   }
 
@@ -254,6 +262,7 @@ export default function App() {
                 </div>
               }
               isSlider={true}
+              sliderOnChange={setFieldValue}
               isMessage={true}
               messageText={
                 <div>
@@ -313,6 +322,7 @@ export default function App() {
             max={formOptions.period.max}
             min={formOptions.period.min}
             isSlider={true}
+            sliderOnChange={setFieldValue}
             sliderText={formOptions.period.sliderText}
             onChange={handleChange}
             isError={errors.period}
@@ -330,6 +340,7 @@ export default function App() {
             isMessage={true}
             messageText="Увеличьте ежемесячный платеж и переплачивайте меньше"
             isSlider={true}
+            sliderOnChange={setFieldValue}
             sliderText={formOptions.monthlyPayment.sliderText}
             onChange={handleChange}
             isError={errors.monthlyPayment}
@@ -338,7 +349,7 @@ export default function App() {
         </fieldset>
 
         <div className="w-full form__button-block bg-secondaryColor tablet:bg-inherit pb-6">
-          <Button textButton="Продолжить" isDisabled={true} />
+          <Button textButton="Продолжить" isDisabled={!isValid} />
         </div>
       </form>
     </div>
