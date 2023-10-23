@@ -41,13 +41,22 @@ export default function App() {
   });
 
   function countMonthlyPayment(time, price, initialFee) {
-    const mortgageRate = 5;
+    const mortgageBody = price - initialFee; // размер кредита
+    const mortgageRate = 5; // процентная ставка
 
-    const mortgageBody = price - initialFee;
-    const percents = mortgageRate * mortgageBody * time;
-    const periodMonths = time * 12;
+    // Преобразуем процентную ставку в десятичное значение
+    const monthlyMortgageRate = mortgageRate / 100 / 12;
+    // Вычисляем общее количество платежей
+    const numberOfPayments = time * 12;
+    // Вычисляем ежемесячный аннуитетный коэффициент
+    const annuityCoefficient =
+      (monthlyMortgageRate *
+        Math.pow(1 + monthlyMortgageRate, numberOfPayments)) /
+      (Math.pow(1 + monthlyMortgageRate, numberOfPayments) - 1);
+    // Вычисляем ежемесячный платеж по кредиту
+    const annuityPayment = mortgageBody * annuityCoefficient;
 
-    return ((percents + mortgageBody) / periodMonths).toFixed(3);
+    return annuityPayment;
   }
 
   function updateFormMinMaxValues(price, initialFee) {
@@ -94,10 +103,10 @@ export default function App() {
     setFieldValue("initialFee", initialFee, true);
     setFieldValue("period", periodYears, true);
     setFieldValue("monthlyPayment", monthlyPayment, true);
-    setFieldValue("city", "", true);
-    setFieldValue("estimateTime", "", true);
-    setFieldValue("estateType", "", true);
-    setFieldValue("hasEstate", "", true);
+    setFieldValue("city", "", false);
+    setFieldValue("estimateTime", "", false);
+    setFieldValue("estateType", "", false);
+    setFieldValue("hasEstate", "", false);
   }
 
   function countChangedPrice() {
@@ -125,7 +134,7 @@ export default function App() {
     setFieldValue("monthlyPayment", monthlyPayment, true);
   }
 
-  function countChangedPeriod() {
+  function countChangedMonthlyPayment() {
     const price = values.price;
     const initialFee = values.initialFee;
     const periodYears = values.period;
@@ -137,7 +146,22 @@ export default function App() {
     setFieldValue("monthlyPayment", monthlyPayment, true);
   }
 
-  function countChangedMonthlyPayment() {}
+  function countChangedPeriod() {
+    const mortgageRate = 5;
+    const monthlyPayment = +values.monthlyPayment;
+    const mortgageBody = values.price - values.initialFee;
+    // Преобразуем процентную ставку в десятичное значение
+    const monthlyMortgageRate = mortgageRate / 100 / 12;
+
+    const numberOfYears = -(
+      Math.log(1 - (mortgageBody * monthlyMortgageRate) / monthlyPayment) /
+      (12 * Math.log(1 + monthlyMortgageRate))
+    );
+
+    setFieldValue("period", numberOfYears, true);
+
+    updateFormMinMaxValues(values.price, values.initialFee);
+  }
 
   useEffect(() => {
     countDefaultValues();
@@ -152,11 +176,11 @@ export default function App() {
   }, [values.initialFee]);
 
   useEffect(() => {
-    values.period && countChangedPeriod();
+    values.period && countChangedMonthlyPayment();
   }, [values.period]);
 
   useEffect(() => {
-    values.monthlyPayment && countChangedMonthlyPayment();
+    values.monthlyPayment && countChangedPeriod();
   }, [values.monthlyPayment]);
 
   return (
@@ -183,7 +207,7 @@ export default function App() {
               onChange={handleChange}
               defaultValue={values.price}
               value={values.price}
-              isError={errors.price}
+              isError={touched.price && errors.price}
               errorText={errors.price}
             />
 
@@ -266,7 +290,7 @@ export default function App() {
                 </div>
               }
               onChange={handleChange}
-              isError={errors.initialFee}
+              isError={touched.initialFee && errors.initialFee}
               errorText={errors.initialFee}
               styles=""
             />
@@ -309,7 +333,7 @@ export default function App() {
             sliderOnChange={setFieldValue}
             sliderText={formOptions.period.sliderText}
             onChange={handleChange}
-            isError={errors.period}
+            isError={touched.period && errors.period}
             errorText={errors.period}
           />
 
@@ -327,7 +351,7 @@ export default function App() {
             sliderOnChange={setFieldValue}
             sliderText={formOptions.monthlyPayment.sliderText}
             onChange={handleChange}
-            isError={errors.monthlyPayment}
+            isError={touched.monthlyPayment && errors.monthlyPayment}
             errorText={errors.monthlyPayment}
           />
         </fieldset>
