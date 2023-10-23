@@ -40,6 +40,10 @@ export default function App() {
     initialFeePercent: 0,
   });
 
+  function formatValuesToString(number) {
+    return number.toLocaleString("en-US", { style: "decimal" });
+  }
+
   function countMonthlyPayment(time, price, initialFee) {
     const mortgageBody = price - initialFee; // размер кредита
     const mortgageRate = 5; // процентная ставка
@@ -56,7 +60,7 @@ export default function App() {
     // Вычисляем ежемесячный платеж по кредиту
     const annuityPayment = mortgageBody * annuityCoefficient;
 
-    return annuityPayment;
+    return annuityPayment.toFixed(3);
   }
 
   function updateFormMinMaxValues(price, initialFee) {
@@ -158,7 +162,7 @@ export default function App() {
       (12 * Math.log(1 + monthlyMortgageRate))
     );
 
-    setFieldValue("period", numberOfYears, true);
+    setFieldValue("period", Math.round(numberOfYears), true);
 
     updateFormMinMaxValues(values.price, values.initialFee);
   }
@@ -205,8 +209,7 @@ export default function App() {
               // onChange={setPrice}
               styles=""
               onChange={handleChange}
-              defaultValue={values.price}
-              value={values.price}
+              value={formatValuesToString(values.price)}
               isError={touched.price && errors.price}
               errorText={errors.price}
             />
@@ -240,8 +243,7 @@ export default function App() {
           <div className="flex gap-8 flex-wrap tablet:gap-y-[23px] tablet:gap-x-[68px] w-full desktop:gap-x-[77px]">
             <Input
               id="initialFee"
-              defaultValue={values.initialFee}
-              value={values.initialFee}
+              value={formatValuesToString(values.initialFee)}
               min={formMinMaxValues.initialFeeMin}
               max={formMinMaxValues.initialFeeMax}
               header="Первоначальный взнос"
